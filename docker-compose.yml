@@ -1,6 +1,7 @@
 version: '3'
 services:
   maven-tokyo:
-    image: thunderz99/maven-tokyo
+    image: thunderz99/maven-tokyo:jar-predownload
+    container_name: maven-tokyo
     build: ./
 
