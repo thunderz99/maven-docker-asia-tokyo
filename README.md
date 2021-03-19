@@ -23,3 +23,14 @@ docker hub:
 * adoptopenjdk 14
 * LinuxKit based(using apt-get)
 * timezone: Asia/Tokyo
+
+
+## How to build this image
+
+update the pom.xml
+
+```bash
+$ docker-compose build
+
+$ docker-compose push
+```

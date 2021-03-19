@@ -1,12 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>io.github.thunderz99</groupId>
-    <artifactId>jar-predownload</artifactId>
+    <groupId>jp.co.nisshinsci.smartcompany</groupId>
+    <artifactId>framework</artifactId>
     <packaging>jar</packaging>
     <version>0.0.1-SNAPSHOT</version>
-    <name>jar-predownload</name>
-    <url>http://maven.apache.org</url>
+    <name>framework</name>
+    <url>https://git.nisshin-dev.work/smartcompany/saas-framework/</url>
 
 
     <properties>
@@ -22,7 +22,7 @@
         <dependency>
             <groupId>io.javalin</groupId>
             <artifactId>javalin</artifactId>
-            <version>3.9.1</version>
+            <version>3.13.3</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
@@ -63,7 +63,7 @@
         <dependency>
             <groupId>com.github.thunderz99</groupId>
             <artifactId>java-cosmos</artifactId>
-            <version>0.2.0</version>
+            <version>0.2.3</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.opencsv/opencsv -->
@@ -75,8 +75,8 @@
 
         <dependency>
             <groupId>io.github.cdimascio</groupId>
-            <artifactId>java-dotenv</artifactId>
-            <version>5.2.1</version>
+            <artifactId>dotenv-java</artifactId>
+            <version>2.2.0</version>
         </dependency>
 
         <dependency>
@@ -204,6 +204,14 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.github.gmazzo/okhttp-mock -->
+        <dependency>
+            <groupId>com.github.gmazzo</groupId>
+            <artifactId>okhttp-mock</artifactId>
+            <version>1.4.0</version>
+            <scope>test</scope>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-email -->
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -225,16 +233,25 @@
     </dependencies>
 
     <build>
-        <finalName>jar-predownload</finalName>
+        <finalName>framework</finalName>
         <resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>true</filtering>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
                 <includes>
-                    <include>**/*.properties</include>
+                    <include>**/version.properties</include>
                 </includes>
-			</resource>
-		</resources>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+                <includes>
+                    <include>**/*.json</include>
+                    <include>**/*.txt</include>
+                    <include>message*.properties</include>
+                </includes>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>pl.project13.maven</groupId>
@@ -249,9 +266,6 @@
                         <phase>initialize</phase>
                     </execution>
                 </executions>
-                <configuration>
-                    <dotGitDirectory>${project.basedir}/.git</dotGitDirectory>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -261,11 +275,11 @@
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                     <release>14</release>
-			        <compilerArgs>
-			            <arg>--enable-preview</arg>
-			        </compilerArgs>
-			        <forceJavacCompilerUse>true</forceJavacCompilerUse>
-			        <parameters>true</parameters>
+                    <compilerArgs>
+                        <arg>--enable-preview</arg>
+                    </compilerArgs>
+                    <forceJavacCompilerUse>true</forceJavacCompilerUse>
+                    <parameters>true</parameters>
                 </configuration>
             </plugin>
             <plugin>
@@ -286,48 +300,68 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.3.0</version>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>single</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>
-				</configuration>
-			</plugin>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.22.1</version>
                 <configuration>
-			        <argLine>@{argLine} --enable-preview</argLine>
-			    </configuration>
+                    <argLine>@{argLine} --enable-preview</argLine>
+                </configuration>
             </plugin>
             <plugin>
-		        <groupId>org.jacoco</groupId>
-		        <artifactId>jacoco-maven-plugin</artifactId>
-		        <version>0.8.5</version>
-		        <executions>
-		            <execution>
-		                <goals>
-		                    <goal>prepare-agent</goal>
-		                </goals>
-		            </execution>
-		            <!-- attached to Maven test phase -->
-		            <execution>
-		                <id>report</id>
-		                <phase>test</phase>
-		                <goals>
-		                    <goal>report</goal>
-		                </goals>
-		            </execution>
-		        </executions>
-		    </plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.5</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>jacoco-check</id>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <rule>
+                                    <element>PACKAGE</element>
+                                    <limits>
+                                        <limit>
+                                            <counter>LINE</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>0.8</minimum>
+                                        </limit>
+                                    </limits>
+                                </rule>
+                            </rules>
+                        </configuration>
+                    </execution>
+                    <!-- attached to Maven test phase -->
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 
             <plugin>
                 <groupId>org.codehaus.gmaven</groupId>
