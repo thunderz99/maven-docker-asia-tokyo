@@ -2,7 +2,6 @@
 A maven docker image with timezone set to Asia/Tokyo(used for gitlab CI/CD)
 
 
-
 ## Usage
 
 The same as maven official image:
@@ -11,9 +10,13 @@ The same as maven official image:
 
 
 ```bash
+
+# Timezone set to Asia/Tokyo
 $ docker pull thunderz99/maven-tokyo
 
+# Besides, predownloaded common used jars. E.g. slf4j, apache commons, jackson, etc.
 $ docker pull thunderz99/maven-tokyo:jar-predownload-openjdk15
+
 ```
 
 docker hub:
@@ -26,7 +29,6 @@ docker hub:
 * LinuxKit based(using apt-get)
 * timezone: Asia/Tokyo
 
-
 ## How to build this image
 
 update the pom.xml
@@ -36,3 +38,5 @@ $ docker-compose build
 
 $ docker-compose push
 ```
+
+* Common jars predownloaded(using specific tag)
