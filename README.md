@@ -12,6 +12,8 @@ The same as maven official image:
 
 ```bash
 $ docker pull thunderz99/maven-tokyo
+
+$ docker pull thunderz99/maven-tokyo:jar-predownload-openjdk15
 ```
 
 docker hub:
@@ -20,7 +22,7 @@ docker hub:
 ## properties
 
 * maven 3
-* adoptopenjdk 14
+* adoptopenjdk 15
 * LinuxKit based(using apt-get)
 * timezone: Asia/Tokyo
 
